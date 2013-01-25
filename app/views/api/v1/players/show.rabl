@@ -1,0 +1,3 @@
+object @player
+
+attributes :email

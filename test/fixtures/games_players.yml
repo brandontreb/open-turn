@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  player_id: 1
+  game_id: 1
+  turn_order: 1
+  meta: MyText
+
+two:
+  player_id: 1
+  game_id: 1
+  turn_order: 1
+  meta: MyText
