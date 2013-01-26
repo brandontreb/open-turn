@@ -4,7 +4,7 @@ class CreateTurns < ActiveRecord::Migration
       t.integer :player_id
       t.text :state_info
       t.integer :game_id
-      t.boolean :completed
+      t.boolean :completed, :default => false
 
       t.timestamps
     end

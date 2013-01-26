@@ -19,7 +19,7 @@ class Api::V1::TokensController < ApplicationController
     @player=Player.find_by_email(email.downcase)
 
     if @player.nil?      
-      render :status=>401, :json=>{:message=>"Invalid email or passoword."}
+      render :status=>401, :json=>{:message=>"Invalid email or password."}
       return
     end
 
