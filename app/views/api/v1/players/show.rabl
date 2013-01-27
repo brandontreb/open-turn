@@ -1,3 +1,3 @@
 object @player
 
-attributes :email
+attributes :email, :id

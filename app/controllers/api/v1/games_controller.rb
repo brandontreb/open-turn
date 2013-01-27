@@ -22,8 +22,32 @@ class Api::V1::GamesController < ApplicationController
     @recent_turns = @game.recent_turns
   end
 
-  private
+  def start
+    puts "STARTING"
+    @game = nil
+    if !params[:game_id]
+      render :status=>406, :json=>{:message=>"No game id provided"}
+      return
+    else
+      @game = Game.find(params[:game_id])
 
+      if @game.state == Game.state_value(:started)
+        render :status=>406, :json=>{:message=>"The game has already started."}
+      return
+      end
+
+      if @game.state == Game.state_value(:ended)
+        render :status=>406, :json=>{:message=>"The game has already ended."}
+      return
+      end      
+      
+      @game.state = Game.state_value(:started)
+      @game.save
+      @game.create_initial_turn
+    end
+  end
+
+  private
   def findOpenGame(game_id = 0)    
     # Join a specific game
     if game_id.to_i > 0
@@ -54,26 +78,7 @@ class Api::V1::GamesController < ApplicationController
         @game.state = Game.state_value(:started)
         @game.save
 
-        # Create the round robin schedule
-        x = 0
-        first_player = nil
-        @game.games_players.shuffle.each do |player|
-
-          if x == 0
-            first_player = player.player
-          end
-
-          player.turn_order = x 
-          player.save
-
-          x = x + 1
-        end
-
-        # Create the initial turn
-        turn = Turn.new(:completed => false)
-        turn.game = @game
-        turn.player = first_player
-        turn.save
+        @game.create_initial_turn()
 
         # TODO: Push to all users that the game has started
         # TODO: Push to the player who's turn is first
@@ -81,7 +86,9 @@ class Api::V1::GamesController < ApplicationController
       else
         # TODO: Push to all players that player has joined        
       end
+    else
+      return findOpenGame()
     end
     return @game
-  end
+  end  
 end
