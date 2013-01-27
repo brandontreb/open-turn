@@ -11,6 +11,7 @@ OpenTurn::Application.routes.draw do
       get 'games/join'
       resources :games do
         get 'join'
+        resources :turns
       end      
     end
   end

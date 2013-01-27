@@ -2,11 +2,15 @@ class Api::V1::GamesController < ApplicationController
   before_filter :authenticate_player!
 
   def index
-    @games = Game.all
+    @games = current_player.games
   end
 
   def show
-    puts params.to_s
+    @game = Game.find(params[:id])
+    if !current_player.games.include?(@game)
+      render :status=>406, :json=>{:message=>"Invalid Game"}
+    end
+    @recent_turns = @game.recent_turns
   end
 
   def join  
@@ -15,6 +19,7 @@ class Api::V1::GamesController < ApplicationController
     else
       @game = findOpenGame()
     end
+    @recent_turns = @game.recent_turns
   end
 
   private

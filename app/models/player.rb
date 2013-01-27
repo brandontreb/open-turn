@@ -1,4 +1,7 @@
 class Player < ActiveRecord::Base
+
+  default_scope includes(:games_players).order('games_players.turn_order ASC')
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
