@@ -11,12 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125051937) do
+ActiveRecord::Schema.define(:version => 20130129045418) do
+
+  create_table "friendships", :force => true do |t|
+    t.integer  "player_id"
+    t.integer  "friend_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "games", :force => true do |t|
     t.integer  "state"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.boolean  "invite_only", :default => false
   end
 
   create_table "games_players", :force => true do |t|
@@ -26,6 +34,14 @@ ActiveRecord::Schema.define(:version => 20130125051937) do
     t.text     "meta"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "invitations", :force => true do |t|
+    t.integer  "player_id"
+    t.integer  "invited_player_id"
+    t.integer  "game_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "players", :force => true do |t|

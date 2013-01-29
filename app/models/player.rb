@@ -10,4 +10,14 @@ class Player < ActiveRecord::Base
   has_many :games, :through => :games_players
   has_many :turns
 
+  has_many :friendships
+  has_many :friends, :through => :friendships
+  has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
+  has_many :inverse_friends, :through => :inverse_friendships, :source => :player
+
+  has_many :invitations
+  has_many :sent_invitations, :through => :invitations, :source => :player
+  has_many :received_invitations, :class_name => "Invitation", :foreign_key => "invited_player_id"
+
+
 end

@@ -6,10 +6,11 @@ class Game < ActiveRecord::Base
     :ended => 2 
   }
 
-  attr_accessible :state
+  attr_accessible :state, :invite_only
   has_many :games_players
   has_many :players, :through => :games_players
   has_many :turns
+  has_many :invitations
 
   # => [:medical, :unkwnown]
   def self.states

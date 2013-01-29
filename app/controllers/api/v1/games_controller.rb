@@ -54,7 +54,7 @@ class Api::V1::GamesController < ApplicationController
       @game = Game.find(game_id)
     else
       # Find the first/oldest open game
-      @game = Game.find_by_state(Game.state_value(:lobby), :order => 'created_at')
+      @game = Game.find_by_state_and_invite_only(Game.state_value(:lobby), false, :order => 'created_at')
 
       if @game.nil?
         # If no open games, start a new one
