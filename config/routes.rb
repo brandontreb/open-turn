@@ -1,4 +1,8 @@
 OpenTurn::Application.routes.draw do
+  get "chat_messages/create"
+
+  get "chat_messages/show"
+
   get "tokens/create"
   get "tokens/destroy"
 
@@ -15,6 +19,7 @@ OpenTurn::Application.routes.draw do
         get 'start'
         resources :turns
         resources :invitations
+        resources :chat_messages
       end      
     end
   end

@@ -11,6 +11,7 @@ class Game < ActiveRecord::Base
   has_many :players, :through => :games_players
   has_many :turns
   has_many :invitations
+  has_many :chat_messages
 
   # => [:medical, :unkwnown]
   def self.states

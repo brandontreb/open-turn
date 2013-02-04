@@ -9,6 +9,7 @@ class Player < ActiveRecord::Base
   has_many :games_players
   has_many :games, :through => :games_players
   has_many :turns
+  has_many :chat_messages
 
   has_many :friendships
   has_many :friends, :through => :friendships

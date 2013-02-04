@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130129045418) do
+ActiveRecord::Schema.define(:version => 20130203200111) do
+
+  create_table "chat_messages", :force => true do |t|
+    t.integer  "player_id"
+    t.integer  "game_id"
+    t.string   "message"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "friendships", :force => true do |t|
     t.integer  "player_id"
