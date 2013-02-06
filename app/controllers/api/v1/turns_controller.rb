@@ -2,7 +2,9 @@ class Api::V1::TurnsController < ApplicationController
   before_filter :authenticate_player!
   def update
     @game = Game.find(params[:game_id])
-    @turn = Turn.find(params[:id])
+
+    turn_id = params.has_key?(:id) ? params[:id] : params[:turn_id] 
+    @turn = Turn.find(turn_id)
 
     # Make sure its a live game
     if @game.state == Game.state_value(:ended)
