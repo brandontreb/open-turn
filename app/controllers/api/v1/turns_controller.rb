@@ -32,6 +32,7 @@ class Api::V1::TurnsController < ApplicationController
 
     if @turn.update_attributes(params[:turn])
       @turn.completed = true
+      @turn.state_info = params[:state_info]
       @turn.save
       # Once the turn is completed, create the next turn
       if @turn.completed       
