@@ -18,7 +18,7 @@ OpenTurn::Application.routes.draw do
         get 'join'
         get 'start'
         resources :turns do
-          post :append, :action => PUT          
+          post :append, :action => :update          
         end
         resources :invitations
         resources :chat_messages
