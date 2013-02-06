@@ -17,7 +17,9 @@ OpenTurn::Application.routes.draw do
       resources :games do
         get 'join'
         get 'start'
-        resources :turns
+        resources :turns do
+          post :append, :action => PUT          
+        end
         resources :invitations
         resources :chat_messages
       end      
