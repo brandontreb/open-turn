@@ -13,7 +13,7 @@ OpenTurn::Application.routes.draw do
       resources :tokens,:only => [:create, :destroy]
       resources :friendships
       resources :invitations
-      resources :players, :only => [:create]
+      resources :players, :only => [:create, :show]
       get 'games/join'
       resources :games do
         get 'join'

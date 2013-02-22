@@ -6,4 +6,8 @@ class Api::V1::PlayersController < ApplicationController
         return
       end
     end
+
+    def show
+      @player = Player.find(params[:id])
+    end
 end
