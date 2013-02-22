@@ -7,6 +7,9 @@ OpenTurn::Application.routes.draw do
   get "tokens/destroy"
 
   devise_for :players
+  devise_scope :players do
+    post "/api/v1/tokens" => "devise/sessions#create"
+  end
   
   namespace :api do
     namespace :v1  do
