@@ -46,5 +46,5 @@ class Api::V1::SessionsController < Devise::SessionsController
   #     @player.reset_authentication_token!
   #     render :status=>200, :json=>{:token=>params[:id]}
   #   end
-  # end
+  end
 end
