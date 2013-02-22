@@ -33,7 +33,7 @@ class Api::V1::SessionsController < Devise::SessionsController
   #   end
   # end
   def create
-    logger.info "Attempt to sign in by #{ params[:user][:login] }"
+    logger.info "Attempt to sign in by #{ params }"
     super
   end
 
