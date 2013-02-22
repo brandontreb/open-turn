@@ -3,8 +3,8 @@ OpenTurn::Application.routes.draw do
 
   get "chat_messages/show"
 
-  get "tokens/create"
-  get "tokens/destroy"
+  # get "sessions/create"
+  # get "sessions/destroy"
 
   devise_for :players, :controllers => { :sessions => "api/v1/sessions" }
   devise_scope :player do
