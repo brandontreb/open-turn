@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130222174607) do
+ActiveRecord::Schema.define(:version => 20130223160946) do
 
   create_table "chat_messages", :force => true do |t|
     t.integer  "player_id"
@@ -67,6 +67,10 @@ ActiveRecord::Schema.define(:version => 20130222174607) do
     t.datetime "updated_at",                             :null => false
     t.string   "authentication_token"
     t.string   "username"
+    t.string   "facebook_id"
+    t.string   "facebook_access_token"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "players", ["email"], :name => "index_players_on_email", :unique => true
