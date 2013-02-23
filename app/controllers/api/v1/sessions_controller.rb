@@ -72,7 +72,15 @@ class Api::V1::SessionsController < Devise::SessionsController
       username = (first_name + last_name[0,1].to_s).downcase
       players = Player.where("username LIKE :prefix", prefix: "#{username}%")
       if players.count > 0
-        username = username + (players.count +1 ).to_s 
+        count = players.count
+        while true do
+          username = username + count.to_s 
+          existing = Player.find_by_username(username)
+          if existing.nil?          
+            break
+          end
+          count = count + 1
+        end
       end
 
       @player = Player.create(:facebook_id => facebook_id, 
