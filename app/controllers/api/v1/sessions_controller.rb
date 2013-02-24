@@ -6,8 +6,9 @@ class Api::V1::SessionsController < Devise::SessionsController
 
     # Check Facebook login
     facebook_token = params[:player][:facebook_access_token]
+    facebook_id = params[:player][:facebook_id]
     if !facebook_token.nil?
-      facebook_login(facebook_token)
+      facebook_login(facebook_token,facebook_id)
       return
     end
 
@@ -56,7 +57,7 @@ class Api::V1::SessionsController < Devise::SessionsController
   #   end
   end
 
-  def facebook_login(facebook_token)
+  def facebook_login(facebook_token, passed_in_facebook_id)
     response = HTTParty.get(' https://graph.facebook.com/me/?access_token=' + facebook_token)
     puts response.body, response.code, response.message, response.headers.inspect
 
@@ -64,42 +65,56 @@ class Api::V1::SessionsController < Devise::SessionsController
     last_name = response.parsed_response["last_name"]
     facebook_id = response.parsed_response["id"]
     random_password = ('0'..'z').to_a.shuffle.first(8).join
+    email = params[:player][:email]
+
+    # Make sure the user is who they say they are
+    if passed_in_facebook_id != facebook_id
+       render :status=>400,
+              :json=>{:message=>"Invalid Facebook session."}
+       return
+    end
 
     @player = Player.find_by_facebook_id(facebook_id)
-
+    
     if @player.nil?
 
-      username = (first_name + last_name[0,1].to_s).downcase
-      players = Player.where("username LIKE :prefix", prefix: "#{username}%")
-      if players.count > 0
-        count = players.count
-        while true do
-          username = username + count.to_s 
-          existing = Player.find_by_username(username)
-          if existing.nil?          
-            break
-          end
-          count = count + 1
-        end
-      end
+      # Merge existing account on Facebook
+      @player = Player.find_by_email(email.downcase)
 
-      @player = Player.create(:facebook_id => facebook_id, 
-        :facebook_access_token => facebook_token,
-        :first_name => first_name,
-        :last_name => last_name,
-        :username => username,
-        :password => random_password)
+      # Create a new player
+      if @player.nil?
+        username = (first_name + last_name[0,1].to_s).downcase
+        players = Player.where("username LIKE :prefix", prefix: "#{username}%")
+        if players.count > 0
+          count = players.count
+          while true do
+            username = username + count.to_s 
+            existing = Player.find_by_username(username)
+            if existing.nil?          
+              break
+            end
+            count = count + 1
+          end
+        end
+
+        @player = Player.create(:facebook_id => facebook_id, 
+          :facebook_access_token => facebook_token,
+          :email => email.downcase,
+          :first_name => first_name,
+          :last_name => last_name,
+          :username => username,
+          :password => random_password)
+      else
+        #update an exisiting one
+        @player.facebook_id = facebook_id
+        @player.facebook_access_token = facebook_token
+        @player.first_name = first_name
+        @player.last_name = last_name
+        @player.save
+      end
     end
 
     @player.ensure_authentication_token!
-
-    # puts "FARTS " + response.parsed_response["first_name"]
-    # response.each do |item|
-    #   puts item
-    # end
-
-    puts @player
-
     render :status=>200, :json=>{:token=>@player.authentication_token, :username => @player.username, :id => @player.id}
 
   end
